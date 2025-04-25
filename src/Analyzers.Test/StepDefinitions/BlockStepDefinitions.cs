@@ -29,7 +29,7 @@ internal sealed class BlockStepDefinitions(SharedStepsContext sharedStepsContext
 
         _sharedStepsContext.FixedSource = SharedStepDefinitions.BuildSource(
             $$"""
-            {|#0:{{accessModifier}} ztatic async Task {{methodName}}()
+            {|#0:{{accessModifier}} static async Task {{methodName}}()
                 {
                     const string path = @"C:\Windows\comsetup.log";
 
