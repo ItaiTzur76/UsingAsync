@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Analyzer Error UsingAsync1</title>
+        <link rel="stylesheet" href="https://learn.microsoft.com/static/assets/0.4.027775677/styles/site-ltr.css">
+    </head>
+    <body>
+        <div class="content uhf-container">
+            <p><a href="https://GitHub.com/ItaiTzur76/UsingAsync">UsingAsync</a></p>
+            <h1>Analyzer Error UsingAsync1</h1>
+            <p><strong>'<i>method</i>' is a non-async Task-returning method with at least one using-statement that might be disposed before the returned Task completes</strong></p>
+            <p>The suggested code-fix is to make the method <code>async</code>.</p>
+            <h2>Example</h2>
+            <p>The following sample generates UsingAsync1:</p>
+            <pre>
+<span class="hljs-comment">// UsingAsync1.cs</span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> ModularExpressions.<span class="hljs-title">Modex</span>;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MyNamespace</span>;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">sealed</span> <span class="hljs-keyword">class</span> <span class="hljs-title">FileStreamTester</span>(<span class="hljs-built_in">string</span> <span class="hljs-string">path</span>) : <span class="hljs-title">IDisposable</span>
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-title">FileStream</span> _fileStream = <span class="hljs-built_in">new</span>(<span class="hljs-string">path</span>, <span class="hljs-title">FileMode</span>.Open, <span class="hljs-title">FileAccess</span>.Read);
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-string">Dispose</span>()
+    {
+        _fileStream.<span class="hljs-string">Dispose</span>();
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> Position => _fileStream.Position;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">Task</span>&lt;<span class="hljs-built_in">long</span>&gt; <span class="hljs-string">DoSomeAsynchronousWorkAndGetPositionAsync</span>()   <span class="hljs-comment">// UsingAsync1 will be reported for this method</span>
+    {
+        <span class="hljs-keyword">using</span> <span class="hljs-title">FileStreamTester</span> fileStreamTester = <span class="hljs-built_in">new</span>("C:<span class="hljs-built_in">\\</span>Windows<span class="hljs-built_in">\\</span>comsetup.log"); <span class="hljs-comment">// or whatever other file that exists on your machine and is currently not in use</span>
+        return <span class="hljs-string">DoSomeAsynchronousWorkAndGetPositionAsync</span>(fileStreamTester);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> <span class="hljs-title">Task</span>&lt;<span class="hljs-built_in">long</span>&gt; <span class="hljs-string">DoSomeAsynchronousWorkAndGetPositionAsync</span>(<span class="hljs-title">FileStreamTester</span> fileStreamTester)
+    {
+        <span class="hljs-keyword">await</span> <span class="hljs-title">Task</span>.<span class="hljs-string">Delay</span>(<span class="hljs-title">TimeSpan</span>.<span class="hljs-string">FromSeconds</span>(1)); <span class="hljs-comment">// this mocks some long asynchronous work</span>
+        return fileStreamTester.Position;
+    }
+}
+</pre>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Start code-analyzer": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\Analyzers.Test\\UsingAsync.Analyzers.Test.csproj"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <!-- Language Setting -->
+    <Nullable>enable</Nullable>
+
+    <!-- Build Setting -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <!-- Avoid build break due to warnings of Nuget not containing netstandard2.0 target-framework lib -->
+    <NoWarn>NU5128</NoWarn>
+
+    <!-- Static Analysis Setting -->
+    <AnalysisLevel>6.0-recommended</AnalysisLevel>
+  </PropertyGroup>
+</Project>
