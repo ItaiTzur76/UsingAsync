@@ -1,0 +1,56 @@
+# Build and test the .NET project
+
+name: .NET
+on: [ push, pull_request ]
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          # Display information about the working-triggering event and the runner
+          echo "The job was triggered by a ${{ github.event_name }} event."
+          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub"
+          echo "for the ${{ github.ref }} branch of the ${{ github.repository }} repository."
+
+      # Use action located in https://github.com/actions
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - run: |
+          # Display check-out information
+          echo "The ${{ github.repository }} repository has been cloned to the runner."
+          echo "The repository has been copied to the path ${{ github.workspace }} on the runner."
+
+      - name: conditional step when event name is pull request
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo "This event is a pull request"
+
+      - name: List files in the repository
+        run: |
+          ls -R ${{ github.workspace }}
+
+      - name: Setup .NET on the runner
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Display dotnet version
+        run: dotnet --version
+
+      - run: echo "Location of the preinstalled tools on the runner: ${{ runner.tool_cache }}"
+
+      - name: List files in tool cache
+        run: |
+          ls ${{ runner.tool_cache }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      - run: echo "This job's status is ${{ job.status }}."

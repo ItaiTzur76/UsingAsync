@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsingAsync.Analyzers", "src\Analyzers\UsingAsync.Analyzers.csproj", "{01CA1521-C926-49AF-BE8D-F134DBC52268}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A8189A64-36F7-4AE2-AB36-4E3FA1721E2A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsingAsync.Analyzers.Test", "src\Analyzers.Test\UsingAsync.Analyzers.Test.csproj", "{4CA64C4C-C670-4B50-9950-4286FBBEA452}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analyzer-messages", "analyzer-messages", "{52D18327-69C8-4BEF-BEAF-24A6E4E6AC9D}"
+	ProjectSection(SolutionItems) = preProject
+		analyzer-messages\UsingAsync1.html = analyzer-messages\UsingAsync1.html
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{01CA1521-C926-49AF-BE8D-F134DBC52268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01CA1521-C926-49AF-BE8D-F134DBC52268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01CA1521-C926-49AF-BE8D-F134DBC52268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01CA1521-C926-49AF-BE8D-F134DBC52268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CA64C4C-C670-4B50-9950-4286FBBEA452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CA64C4C-C670-4B50-9950-4286FBBEA452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CA64C4C-C670-4B50-9950-4286FBBEA452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CA64C4C-C670-4B50-9950-4286FBBEA452}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52D18327-69C8-4BEF-BEAF-24A6E4E6AC9D} = {A8189A64-36F7-4AE2-AB36-4E3FA1721E2A}
+	EndGlobalSection
+EndGlobal
