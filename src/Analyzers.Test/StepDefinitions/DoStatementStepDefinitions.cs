@@ -32,7 +32,7 @@ internal sealed class DoStatementStepDefinitions(SharedStepsContext sharedStepsC
 
         _sharedStepsContext.FixedSource = SharedStepDefinitions.BuildSource(
             $$"""
-            {|#0:{{accessModifier}} ztatic async Task {{methodName}}()
+            {|#0:{{accessModifier}} static async Task {{methodName}}()
                 {
                     do
                     {
