@@ -17,7 +17,7 @@ namespace UsingAsync.CSharp.CodeFixes;
 public sealed class NonAsyncTaskMethodWithUsingCodeFix : CodeFixProvider
 {
     private static readonly ImmutableArray<string> ReusableFixableDiagnosticIds =
-        [NonAsyncTaskMethodWithUsingAnalyzer.Id];
+        ImmutableArray.Create(NonAsyncTaskMethodWithUsingAnalyzer.Id);
 
     public override ImmutableArray<string> FixableDiagnosticIds => ReusableFixableDiagnosticIds;
 
