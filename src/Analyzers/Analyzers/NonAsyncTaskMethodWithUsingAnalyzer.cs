@@ -21,9 +21,12 @@ public sealed class NonAsyncTaskMethodWithUsingAnalyzer : DiagnosticAnalyzer
         category: "Design",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        helpLinkUri: "https://GitHub.com/ItaiTzur76/UsingAsync/blob/main/analyzer-messages/UsingAsync1.html");
+        helpLinkUri: "https://raw.githubusercontent.com/ItaiTzur76/UsingAsync/main/analyzer-messages/UsingAsync1.html");
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [DiagnosticDescriptor];
+    private static readonly ImmutableArray<DiagnosticDescriptor> ReusableSupportedDiagnostics =
+        ImmutableArray.Create(DiagnosticDescriptor);
+
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ReusableSupportedDiagnostics;
 
     private static readonly HashSet<string> CompletedTaskSymbolNames
         = [Constants.CompletedTask, Constants.FromResult, "FromException", "FromCanceled"];
