@@ -206,6 +206,15 @@ The **UsingAsync** analyzer warns about such cases during design-time and theref
 ## Install and Setup
 To use the **UsingAsync** analyzer, include [the UsingAsync NuGet package](https://www.NuGet.org/packages/UsingAsync) in your C# project.
 
+If you [manage your packages centrally](https://DevBlogs.microsoft.com/dotnet/introducing-central-package-management) you can do that manually by adding the following to the `ItemGroup` element containing all package versions in your `Directory.Packages.props` file:
+```xml
+<PackageVersion Include="UsingAsync" Version="1.0.1" />
+```
+You can then have **UsingAsync** analyze all projects in your solution by adding the following to an `ItemGroup` element in [your Directory.Build.props file](https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory):
+```xml
+<PackageReference Include="UsingAsync" PrivateAssets="all" IncludeAssets="analyzers" />
+```
+
 ## Contribute
 If you find a problem or bug, or if you have a question or suggestion, please contact me using the [Contact owners &rarr;](https://www.NuGet.org/packages/UsingAsync#:~:text=Owners-,Contact%20owners%20%E2%86%92) link on [the NuGet page](https://www.NuGet.org/packages/UsingAsync).
 
