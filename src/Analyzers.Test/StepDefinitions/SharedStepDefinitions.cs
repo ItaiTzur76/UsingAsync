@@ -6,22 +6,24 @@ namespace UsingAsync.Analyzers.Test;
 internal sealed class SharedStepDefinitions(SharedStepsContext sharedStepsContext)
 {
     private readonly SharedStepsContext _sharedStepsContext = sharedStepsContext;
-    private DiagnosticResult _expected;
+    private Lazy<DiagnosticResult>? _expected;
 
-    [When("UsingAsync diagnostic is performed")]
-    internal void WhenUsingAsyncDiagnosticIsPerformed()
+    [When("UsingAsync diagnostic is performed on the (.+)")]
+    internal void WhenUsingAsyncDiagnosticIsPerformedOnThe(string syntaxKind)
     {
-        _expected = CSharpCodeFixVerifier.Diagnostic(NonAsyncTaskMethodWithUsingAnalyzer.DiagnosticDescriptor)
-            .WithLocation(0)
-            .WithArguments(_sharedStepsContext.MethodName!);
+        _expected = new(() =>
+            CSharpCodeFixVerifier.Diagnostic(NonAsyncTaskMethodWithUsingAnalyzer.DiagnosticDescriptor)
+                .WithLocation(0)
+                .WithArguments(_sharedStepsContext.MethodName!, syntaxKind));
     }
 
     [Then("the analyzer finds that diagnostic result and suggests the proper code-fix")]
     internal async Task ThenTheAnalyzerFindsThatDiagnosticResultAndSuggestsTheProperCodeFixAsync()
     {
         var source = _sharedStepsContext.Source!;
-        await CSharpCodeFixVerifier.VerifyAnalyzerAsync(source, _expected);
-        await CSharpCodeFixVerifier.VerifyCodeFixAsync(source, _expected, _sharedStepsContext.FixedSource!);
+        var expected = _expected!.Value;
+        await CSharpCodeFixVerifier.VerifyAnalyzerAsync(source, expected);
+        await CSharpCodeFixVerifier.VerifyCodeFixAsync(source, expected, _sharedStepsContext.FixedSource!);
     }
 
     [Then("the analyzer finds no diagnostic results")]

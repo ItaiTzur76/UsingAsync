@@ -14,9 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsingAsync.Analyzers.Test", "src\Analyzers.Test\UsingAsync.Analyzers.Test.csproj", "{4CA64C4C-C670-4B50-9950-4286FBBEA452}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analyzer-messages", "analyzer-messages", "{52D18327-69C8-4BEF-BEAF-24A6E4E6AC9D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{52D18327-69C8-4BEF-BEAF-24A6E4E6AC9D}"
 	ProjectSection(SolutionItems) = preProject
-		analyzer-messages\UsingAsync1.html = analyzer-messages\UsingAsync1.html
+		docs\UsingAsync1.html = docs\UsingAsync1.html
 	EndProjectSection
 EndProject
 Global
