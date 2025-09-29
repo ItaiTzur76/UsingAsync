@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -17,14 +18,13 @@ public sealed class NonAsyncTaskMethodWithUsingAnalyzer : DiagnosticAnalyzer
         id: Id,
         title: "Task might try to access disposed resource",
         messageFormat:
-            "'{0}' is a non-async Task-returning method with at least one using-statement that might be disposed before the returned Task completes",
+            "'{0}' is a non-async Task-returning {1} with at least one using-statement that might be disposed before the returned Task completes",
         category: "Design",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        helpLinkUri: "https://raw.githubusercontent.com/ItaiTzur76/UsingAsync/main/analyzer-messages/UsingAsync1.html");
+        helpLinkUri: "https://ItaiTzur76.GitHub.io/UsingAsync/UsingAsync1.html");
 
-    private static readonly ImmutableArray<DiagnosticDescriptor> ReusableSupportedDiagnostics =
-        ImmutableArray.Create(DiagnosticDescriptor);
+    private static readonly ImmutableArray<DiagnosticDescriptor> ReusableSupportedDiagnostics = [DiagnosticDescriptor];
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ReusableSupportedDiagnostics;
 
@@ -36,31 +36,58 @@ public sealed class NonAsyncTaskMethodWithUsingAnalyzer : DiagnosticAnalyzer
         context.EnableConcurrentExecution();
         context.ConfigureGeneratedCodeAnalysis(
             GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-        context.RegisterSyntaxNodeAction(Analyze, SyntaxKind.MethodDeclaration);
+        context.RegisterSyntaxNodeAction(AnalyzeMethodDeclaration, SyntaxKind.MethodDeclaration);
+        context.RegisterSyntaxNodeAction(AnalyzeLocalFunctionStatement, SyntaxKind.LocalFunctionStatement);
 
-        static void Analyze(SyntaxNodeAnalysisContext context)
+        static void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var contextNode = context.Node;
-            var methodDeclarationSyntax = (MethodDeclarationSyntax)contextNode;
-            var body = methodDeclarationSyntax.Body;
-            if (body is null || methodDeclarationSyntax.Modifiers.Any(SyntaxKind.AsyncKeyword))
+            var methodDeclarationSyntax = (MethodDeclarationSyntax)context.Node;
+            Analyze(
+                context,
+                methodDeclarationSyntax.Body,
+                methodDeclarationSyntax.Modifiers,
+                methodDeclarationSyntax.Identifier,
+                getSymbol: () => context.ContainingSymbol,
+                contextKind: "method");
+        }
+
+        static void AnalyzeLocalFunctionStatement(SyntaxNodeAnalysisContext context)
+        {
+            var localFunctionStatementSyntax = (LocalFunctionStatementSyntax)context.Node;
+            Analyze(
+                context,
+                localFunctionStatementSyntax.Body,
+                localFunctionStatementSyntax.Modifiers,
+                localFunctionStatementSyntax.Identifier,
+                getSymbol: () => context.SemanticModel.GetDeclaredSymbol(context.Node),
+                contextKind: "local function");
+        }
+
+        static void Analyze(
+            SyntaxNodeAnalysisContext context,
+            BlockSyntax? body,
+            SyntaxTokenList modifiers,
+            SyntaxToken contextIdentifier,
+            Func<ISymbol?> getSymbol,
+            object? contextKind)
+        {
+            if (body is null || modifiers.Any(SyntaxKind.AsyncKeyword))
             {
                 return;
             }
 
-            var containingSymbol = context.ContainingSymbol!;
             var compilation = context.Compilation;
             var taskClassSymbol = compilation.GetTaskClassType();
             var taskGenericSymbol = compilation.GetTypeByMetadataName("System.Threading.Tasks.Task`1");
-            if (TypeIsNotTask(((IMethodSymbol)containingSymbol).ReturnType.OriginalDefinition))
+            if (TypeIsNotTask(((IMethodSymbol)getSymbol()!).ReturnType.OriginalDefinition))
             {
                 return;
             }
 
             if (StatementsMightUseDisposedResource(body.Statements, usingEncountered: false))
             {
-                context.ReportDiagnostic(
-                    Diagnostic.Create(DiagnosticDescriptor, contextNode.GetLocation(), containingSymbol.Name));
+                context.ReportDiagnostic(Diagnostic.Create(
+                    DiagnosticDescriptor, context.Node.GetLocation(), contextIdentifier.Text, contextKind));
             }
 
             bool StatementsMightUseDisposedResource(

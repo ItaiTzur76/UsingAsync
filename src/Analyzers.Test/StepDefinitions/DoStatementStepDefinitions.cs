@@ -48,6 +48,58 @@ internal sealed class DoStatementStepDefinitions(SharedStepsContext sharedStepsC
             """);
     }
 
+    [Given("a non-async local function that returns some Task inside a using-declaration scope in a do-statement")]
+    internal void GivenANonAsyncLocalFunctionThatReturnsSomeTaskInsideAUsingDeclarationScopeInADoStatement()
+    {
+        var accessModifier = new Faker().RandomAccessModifier();
+        var methodName = _sharedStepsContext.GenerateAsyncMethodName();
+        var functionName = _sharedStepsContext.GenerateAsyncMethodName();
+        var variableName = SharedStepsContext.GenerateIdentifier();
+
+        _sharedStepsContext.Source = SharedStepDefinitions.BuildSource(
+            $$"""
+            {{accessModifier}} static void {{methodName}}()
+                {
+                    {{functionName}}().Wait();
+
+                    {|#0:static Task {{functionName}}()
+                    {
+                        do
+                        {
+                            if (long.MaxValue > 0)
+                            {
+                                using FileStreamWrapper {{variableName}} = new(@"C:\Windows\comsetup.log");
+                                return DoSomeAsynchronousWorkAsync({{variableName}});
+                            }
+                        }
+                        while (long.MaxValue > 0);
+                    }|}
+                }
+            """);
+
+        _sharedStepsContext.FixedSource = SharedStepDefinitions.BuildSource(
+            $$"""
+            {{accessModifier}} static void {{methodName}}()
+                {
+                    {{functionName}}().Wait();
+
+                    {|#0:static async Task {{functionName}}()
+                    {
+                        do
+                        {
+                            if (long.MaxValue > 0)
+                            {
+                                using FileStreamWrapper {{variableName}} = new(@"C:\Windows\comsetup.log");
+                                await DoSomeAsynchronousWorkAsync({{variableName}});
+                                return;
+                            }
+                        }
+                        while (long.MaxValue > 0);
+                    }|}
+                }
+            """);
+    }
+
     [Given("a non-async method that returns some generic-Task inside a using-declaration scope in a do-statement")]
     internal void GivenANonAsyncMethodThatReturnsSomeGenericTaskInsideAUsingDeclarationScopeInADoStatement()
     {
@@ -88,6 +140,57 @@ internal sealed class DoStatementStepDefinitions(SharedStepsContext sharedStepsC
             """);
     }
 
+    [Given("a non-async local function that returns some generic-Task inside a using-declaration scope in a do-statement")]
+    internal void GivenANonAsyncLocalFunctionThatReturnsSomeGenericTaskInsideAUsingDeclarationScopeInADoStatement()
+    {
+        var accessModifier = new Faker().RandomAccessModifier();
+        var methodName = _sharedStepsContext.GenerateAsyncMethodName();
+        var functionName = _sharedStepsContext.GenerateAsyncMethodName();
+        var variableName = SharedStepsContext.GenerateIdentifier();
+
+        _sharedStepsContext.Source = SharedStepDefinitions.BuildSource(
+            $$"""
+            {{accessModifier}} static long {{methodName}}()
+                {
+                    return {{functionName}}().Result;
+
+                    {|#0:static Task<long> {{functionName}}()
+                    {
+                        do
+                        {
+                            if (long.MaxValue > 0)
+                            {
+                                using FileStreamWrapper {{variableName}} = new(@"C:\Windows\comsetup.log");
+                                return DoSomeAsynchronousWorkAndGetPositionAsync({{variableName}});
+                            }
+                        }
+                        while (long.MaxValue > 0);
+                    }|}
+                }
+            """);
+
+        _sharedStepsContext.FixedSource = SharedStepDefinitions.BuildSource(
+            $$"""
+            {{accessModifier}} static long {{methodName}}()
+                {
+                    return {{functionName}}().Result;
+
+                    {|#0:static async Task<long> {{functionName}}()
+                    {
+                        do
+                        {
+                            if (long.MaxValue > 0)
+                            {
+                                using FileStreamWrapper {{variableName}} = new(@"C:\Windows\comsetup.log");
+                                return await DoSomeAsynchronousWorkAndGetPositionAsync({{variableName}});
+                            }
+                        }
+                        while (long.MaxValue > 0);
+                    }|}
+                }
+            """);
+    }
+
     [Given("a non-async method that returns some Task not inside a using-declaration scope in a do-statement")]
     internal void GivenANonAsyncMethodThatReturnsSomeTaskNotInsideAUsingDeclarationScopeInADoStatement()
     {
@@ -107,6 +210,32 @@ internal sealed class DoStatementStepDefinitions(SharedStepsContext sharedStepsC
             """);
     }
 
+    [Given("a non-async local function that returns some Task not inside a using-declaration scope in a do-statement")]
+    internal void GivenANonAsyncLocalFunctionThatReturnsSomeTaskNotInsideAUsingDeclarationScopeInADoStatement()
+    {
+        var functionName = _sharedStepsContext.GenerateAsyncMethodName();
+
+        _sharedStepsContext.Source = SharedStepDefinitions.BuildSource(
+            $$"""
+            {{new Faker().RandomAccessModifier()}} static void {{_sharedStepsContext.GenerateAsyncMethodName()}}()
+                {
+                    {{functionName}}().Wait();
+
+                    {|#0:static Task {{functionName}}()
+                    {
+                        do
+                        {
+                            if (long.MaxValue > 0)
+                            {
+                                return DoSomeAsynchronousWorkAsync(null);
+                            }
+                        }
+                        while (long.MaxValue > 0);
+                    }|}
+                }
+            """);
+    }
+
     [Given("a non-async method that returns some generic-Task not inside a using-declaration scope in a do-statement")]
     internal void GivenANonAsyncMethodThatReturnsSomeGenericTaskNotInsideAUsingDeclarationScopeInADoStatement()
     {
@@ -123,6 +252,32 @@ internal sealed class DoStatementStepDefinitions(SharedStepsContext sharedStepsC
                     }
                     while (long.MaxValue > 0);
                 }|}
+            """);
+    }
+
+    [Given("a non-async local function that returns some generic-Task not inside a using-declaration scope in a do-statement")]
+    internal void GivenANonAsyncLocalFunctionThatReturnsSomeGenericTaskNotInsideAUsingDeclarationScopeInADoStatement()
+    {
+        var functionName = _sharedStepsContext.GenerateAsyncMethodName();
+
+        _sharedStepsContext.Source = SharedStepDefinitions.BuildSource(
+            $$"""
+            {{new Faker().RandomAccessModifier()}} static long {{_sharedStepsContext.GenerateAsyncMethodName()}}()
+                {
+                    return {{functionName}}().Result;
+
+                    {|#0:static Task<long> {{functionName}}()
+                    {
+                        do
+                        {
+                            if (long.MaxValue > 0)
+                            {
+                                return DoSomeAsynchronousWorkAndGetPositionAsync(null);
+                            }
+                        }
+                        while (long.MaxValue > 0);
+                    }|}
+                }
             """);
     }
 
@@ -146,6 +301,33 @@ internal sealed class DoStatementStepDefinitions(SharedStepsContext sharedStepsC
             """);
     }
 
+    [Given("a non-async local function that returns a completed Task inside a using-declaration scope in a do-statement")]
+    internal void GivenANonAsyncLocalFunctionThatReturnsACompletedTaskInsideAUsingDeclarationScopeInADoStatement()
+    {
+        var functionName = _sharedStepsContext.GenerateAsyncMethodName();
+
+        _sharedStepsContext.Source = SharedStepDefinitions.BuildSource(
+            $$"""
+            {{new Faker().RandomAccessModifier()}} static void {{_sharedStepsContext.GenerateAsyncMethodName()}}()
+                {
+                    {{functionName}}().Wait();
+
+                    {|#0:static Task {{functionName}}()
+                    {
+                        do
+                        {
+                            if (long.MaxValue > 0)
+                            {
+                                using FileStreamWrapper {{SharedStepsContext.GenerateIdentifier()}} = new(@"C:\Windows\comsetup.log");
+                                return Task.CompletedTask;
+                            }
+                        }
+                        while (long.MaxValue > 0);
+                    }|}
+                }
+            """);
+    }
+
     [Given("a non-async method that returns a completed generic-Task inside a using-declaration scope in a do-statement")]
     internal void GivenANonAsyncMethodThatReturnsACompletedGenericTaskInsideAUsingDeclarationScopeInADoStatement()
     {
@@ -165,6 +347,34 @@ internal sealed class DoStatementStepDefinitions(SharedStepsContext sharedStepsC
                     }
                     while (long.MaxValue > 0);
                 }|}
+            """);
+    }
+
+    [Given("a non-async local function that returns a completed generic-Task inside a using-declaration scope in a do-statement")]
+    internal void GivenANonAsyncLocalFunctionThatReturnsACompletedGenericTaskInsideAUsingDeclarationScopeInADoStatement()
+    {
+        var functionName = _sharedStepsContext.GenerateAsyncMethodName();
+        var variableName = SharedStepsContext.GenerateIdentifier();
+
+        _sharedStepsContext.Source = SharedStepDefinitions.BuildSource(
+            $$"""
+            {{new Faker().RandomAccessModifier()}} static long {{_sharedStepsContext.GenerateAsyncMethodName()}}()
+                {
+                    return {{functionName}}().Result;
+
+                    {|#0:static Task<long> {{functionName}}()
+                    {
+                        do
+                        {
+                            if (long.MaxValue > 0)
+                            {
+                                using FileStreamWrapper {{variableName}} = new(@"C:\Windows\comsetup.log");
+                                return Task.FromResult({{variableName}}.Position);
+                            }
+                        }
+                        while (long.MaxValue > 0);
+                    }|}
+                }
             """);
     }
 }
