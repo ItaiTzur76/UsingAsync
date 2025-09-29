@@ -14,7 +14,7 @@
     <Authors>Itai Tzur</Authors>
     <Product>$(SolutionName)</Product>
     <Description>A Rosyln-powered analyzer for catching non-async Task-returning methods that might access disposed resources.</Description>
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.1.0</VersionPrefix>
     <PackageProjectUrl>https://GitHub.com/ItaiTzur76/UsingAsync</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Analyzer, Async, Using</PackageTags>

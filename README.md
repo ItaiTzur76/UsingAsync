@@ -208,7 +208,7 @@ To use the **UsingAsync** analyzer, include [the UsingAsync NuGet package](https
 
 If you [manage your packages centrally](https://DevBlogs.microsoft.com/dotnet/introducing-central-package-management) you can do that manually by adding the following to the `ItemGroup` element containing all package versions in your `Directory.Packages.props` file:
 ```xml
-<PackageVersion Include="UsingAsync" Version="1.0.1" />
+<PackageVersion Include="UsingAsync" Version="1.1.0" />
 ```
 You can then have **UsingAsync** analyze all projects in your solution by adding the following to an `ItemGroup` element in [your Directory.Build.props file](https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory):
 ```xml
