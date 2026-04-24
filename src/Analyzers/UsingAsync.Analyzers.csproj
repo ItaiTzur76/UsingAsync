@@ -10,15 +10,23 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <PackageId>$(SolutionName)</PackageId>
-    <Authors>Itai Tzur</Authors>
     <Product>$(SolutionName)</Product>
-    <Description>A Rosyln-powered analyzer for catching non-async Task-returning methods that might access disposed resources.</Description>
-    <VersionPrefix>1.1.0</VersionPrefix>
-    <PackageProjectUrl>https://GitHub.com/ItaiTzur76/UsingAsync</PackageProjectUrl>
+    <PackageIcon>Logo.png</PackageIcon>
+    <PackageId>$(SolutionName)</PackageId>
+    <VersionPrefix>1.1.1</VersionPrefix>
+    <Authors>Itai Tzur</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>Analyzer, Async, Using</PackageTags>
+    <PackageTags>Async, Using, Analyzer, Roslyn</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://GitHub.com/ItaiTzur76/UsingAsync</PackageProjectUrl>
+    <Copyright>Copyright (c) ItaiTzur 2025</Copyright>
+    <Description>A Rosyln-powered analyzer for catching non-async Task-returning methods that might access disposed resources.</Description>
     <PackageReleaseNotes>
+## 1.1.1:
+
+Features:
+# Add (MIT) license
+
 ## 1.1.0:
 
 Features:
@@ -36,8 +44,6 @@ Bug fixes:
 
 Initial release
     </PackageReleaseNotes>
-    <PackageIcon>Logo.png</PackageIcon>
-    <Copyright>Copyright (c) ItaiTzur 2025</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
